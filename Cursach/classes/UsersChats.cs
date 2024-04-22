@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cursach.classes
 {
-    public class Chat
+    public class UsersChats
     {
-        public int Id {  get; set; }    
-        public string Name { get; set; }
-        public List<Message> Messages { get; set; }
+        public int UserId { get; set; }
+        public int ChatId { get; set; } 
     }
 }

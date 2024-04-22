@@ -16,8 +16,5 @@ namespace Cursach.classes
         public string Username {  get; set; }   
         public string Salt { get; set; }
         public string Hash { get; set; }
-        //Blacklist fk
-        public int BlackListId { get; set; }
-        public BlackList BlackList { get; set; }
     }
 }

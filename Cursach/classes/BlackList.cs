@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Cursach.classes
 {
+    //many to many between users
     public class BlackList
     {
-        public int Id { get; set; }
-        //blacklist owner fk
-        public int UserId { get; set; } 
-        public User user {  get; set; } 
-        //blocked users
-        public List<User> Users { get; set; }
+        //who added the user to their blacklist
+        public int BlockerId {  get; set; } 
+        public User Blocker { get; set; }
+        //who was added to blacklist
+        public int BlockedId { get; set; }
+        public User Blocked { get; set; }
     }
 }
