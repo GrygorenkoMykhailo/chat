@@ -1,4 +1,4 @@
-namespace Cursach
+namespace Server
 {
     internal static class Program
     {

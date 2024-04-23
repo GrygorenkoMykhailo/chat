@@ -1,4 +1,4 @@
-﻿namespace Cursach
+﻿namespace Server
 {
     partial class Form1
     {
