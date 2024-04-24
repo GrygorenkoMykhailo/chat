@@ -1,8 +1,4 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
-using Server.classes;
-using AppContext = Server.contexts.ApplicationContext;
-
 namespace Server
 {
     partial class Form1
@@ -20,7 +16,7 @@ namespace Server
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad(e);
+            base.OnLoad(e);  
         }
 
         private Label label1;
