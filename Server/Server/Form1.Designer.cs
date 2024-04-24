@@ -1,11 +1,10 @@
-﻿
-<<<<<<< HEAD
-=======
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.ApplicationServices;
 using Server.classes;
+using Server.tcpServer;
+using System.Diagnostics;
 using AppContext = Server.contexts.ApplicationContext;
 
->>>>>>> 6566dd2 (configured efcore database)
 namespace Server
 {
     partial class Form1
@@ -23,13 +22,15 @@ namespace Server
 
         protected override void OnLoad(EventArgs e)
         {
-<<<<<<< HEAD
-            base.OnLoad(e);  
-=======
+            Task.Run(async () =>
+            {
+                await new Server.tcpServer.Server().Start(8000);
+            });
+
             base.OnLoad(e);
->>>>>>> 6566dd2 (configured efcore database)
         }
 
+        private Server.tcpServer.Server server;
         private Label label1;
     }
 }

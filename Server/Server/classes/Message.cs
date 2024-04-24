@@ -10,6 +10,7 @@ namespace Server.classes
     {
         public int Id { get; set; }
         public string Content { get; set; }
+        public string SenderUsername { get; set; }
         public int ChatId { get; set; }
         public Chat Chat { get; set; }
     }
