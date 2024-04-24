@@ -1,4 +1,11 @@
 ﻿
+<<<<<<< HEAD
+=======
+using Microsoft.EntityFrameworkCore;
+using Server.classes;
+using AppContext = Server.contexts.ApplicationContext;
+
+>>>>>>> 6566dd2 (configured efcore database)
 namespace Server
 {
     partial class Form1
@@ -16,7 +23,11 @@ namespace Server
 
         protected override void OnLoad(EventArgs e)
         {
+<<<<<<< HEAD
             base.OnLoad(e);  
+=======
+            base.OnLoad(e);
+>>>>>>> 6566dd2 (configured efcore database)
         }
 
         private Label label1;

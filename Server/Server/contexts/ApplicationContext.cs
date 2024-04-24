@@ -19,7 +19,11 @@ namespace Server.contexts
         public ApplicationContext() 
         {
             //Database.EnsureDeleted();
+<<<<<<< HEAD
            // Database.EnsureCreated();
+=======
+            //Database.EnsureCreated();
+>>>>>>> 6566dd2 (configured efcore database)
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -44,14 +48,22 @@ namespace Server.contexts
             });
 
             modelBuilder.Entity<User>().HasMany(u => u.Chats).WithMany(c => c.Users);
+<<<<<<< HEAD
             modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+=======
+>>>>>>> 6566dd2 (configured efcore database)
         }
 
         public void AddInitialData()
         {
             // Создаем пользователей
+<<<<<<< HEAD
             var user1 = new User { Username = "User1", Salt = "salt1", Hash = "hash1" };
             var user2 = new User { Username = "User2", Salt = "salt2", Hash = "hash2" };
+=======
+            var user1 = new User { UserName = "User1", Salt = "salt1", Hash = "hash1" };
+            var user2 = new User { UserName = "User2", Salt = "salt2", Hash = "hash2" };
+>>>>>>> 6566dd2 (configured efcore database)
 
             // Создаем чат
             var chat1 = new Chat { Name = "Chat1" };
