@@ -18,12 +18,8 @@ namespace Server.contexts
         public DbSet<BlackList> BlackList { get; set; }
         public ApplicationContext() 
         {
-            //Database.EnsureDeleted();
-<<<<<<< HEAD
-           // Database.EnsureCreated();
-=======
-            //Database.EnsureCreated();
->>>>>>> 6566dd2 (configured efcore database)
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -48,22 +44,13 @@ namespace Server.contexts
             });
 
             modelBuilder.Entity<User>().HasMany(u => u.Chats).WithMany(c => c.Users);
-<<<<<<< HEAD
-            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-=======
->>>>>>> 6566dd2 (configured efcore database)
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         }
 
         public void AddInitialData()
         {
-            // Создаем пользователей
-<<<<<<< HEAD
-            var user1 = new User { Username = "User1", Salt = "salt1", Hash = "hash1" };
-            var user2 = new User { Username = "User2", Salt = "salt2", Hash = "hash2" };
-=======
-            var user1 = new User { UserName = "User1", Salt = "salt1", Hash = "hash1" };
-            var user2 = new User { UserName = "User2", Salt = "salt2", Hash = "hash2" };
->>>>>>> 6566dd2 (configured efcore database)
+            var user1 = new User { Username = "User1", Email = "bob", Salt = "salt1", Hash = "hash1" };
+            var user2 = new User { Username = "User2", Email = "john", Salt = "salt2", Hash = "hash2" };
 
             // Создаем чат
             var chat1 = new Chat { Name = "Chat1" };
