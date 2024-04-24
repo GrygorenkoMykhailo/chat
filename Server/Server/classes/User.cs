@@ -12,5 +12,6 @@ namespace Server.classes
         public string UserName { get; set; }    
         public string Salt { get; set; }
         public string Hash { get; set; }
+        public List<Chat> Chats { get; set; } = new List<Chat>();
     }
 }

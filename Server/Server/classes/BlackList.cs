@@ -8,6 +8,7 @@ namespace Server.classes
 {
     public class BlackList
     {
+        public int Id {  get; set; }    
         public int BlockerId { get; set; }
         public User Blocker { get; set; }
         public int BlockedId { get; set; }
