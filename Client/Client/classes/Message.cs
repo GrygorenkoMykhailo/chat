@@ -8,9 +8,10 @@ namespace Client.classes
 {
     public class Message
     {
-        public int Id {  get; set; }    
+        public int Id { get; set; }
         public string Content { get; set; }
-        public int ChatId { get; set; } 
+        public string SenderUsername { get; set; }
+        public int ChatId { get; set; }
         public Chat Chat { get; set; }
     }
 }

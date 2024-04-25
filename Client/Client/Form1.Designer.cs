@@ -1,24 +1,13 @@
-﻿namespace Client
+﻿using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace Client
 {
     partial class Form1
     {
-        /// <summary>
-<<<<<<< HEAD
-        ///  Required designer variable.
-=======
-        /// Required designer variable.
->>>>>>> ArDev
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-<<<<<<< HEAD
-        ///  Clean up any resources being used.
-=======
-        /// Clean up any resources being used.
->>>>>>> ArDev
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -28,28 +17,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-<<<<<<< HEAD
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
-        }
-
-        #endregion
-    }
-}
-=======
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             MassageSend = new Button();
@@ -97,11 +64,8 @@
             PerformLayout();
         }
 
-        #endregion
-
         private Button MassageSend;
         private TextBox MassegeBox;
         private TextBox ChatBox;
     }
 }
->>>>>>> ArDev
