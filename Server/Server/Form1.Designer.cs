@@ -5,6 +5,8 @@ using Server.tcpServer;
 using System.Diagnostics;
 using AppContext = Server.contexts.ApplicationContext;
 
+using Server.repositories;
+
 namespace Server
 {
     partial class Form1
@@ -24,7 +26,15 @@ namespace Server
         {
             Task.Run(async () =>
             {
-                await new Server.tcpServer.Server().Start(8000);
+                server = new Server.tcpServer.Server();
+                server.MessageReceived += (object sender, string message) =>
+                {
+                    label1.Invoke((MethodInvoker)delegate
+                    {
+                        label1.Text = message;
+                    });
+                };
+                await server.Start(8000);
             });
 
             base.OnLoad(e);
