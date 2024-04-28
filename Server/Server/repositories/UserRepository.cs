@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AppContext = Server.contexts.ApplicationContext;
 using Server.classes;
 using Microsoft.EntityFrameworkCore;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Server.repositories
 {
@@ -16,7 +17,11 @@ namespace Server.repositories
         {
             using(AppContext context = new AppContext())
             {
-                return context.Users.FirstOrDefault(x => x.Id == id);
+                return context.Users.
+                    Include(u => u.Chats).
+                    Include(u => u.Friends).
+                    Include(u => u.Blocked).
+                    FirstOrDefault(u => u.Id == id);
             }
         }
 
@@ -24,7 +29,11 @@ namespace Server.repositories
         {
             using (AppContext context = new AppContext())
             {
-                return context.Users.FirstOrDefault(u => u.Email == email);
+                return context.Users.
+                    Include(u => u.Chats).
+                    Include(u => u.Friends).
+                    Include(u => u.Blocked).
+                    FirstOrDefault(u => u.Email == email);
             }
         }
 

@@ -53,6 +53,9 @@ namespace Server.tcpServer.requesthandlers
                                     {
                                         Username = u.Username,
                                         Email = u.Email,
+                                        Chats = u.Chats,
+                                        Friends = u.Friends,
+                                        Blocked = u.Blocked,
                                     }
                                 )
                         };
