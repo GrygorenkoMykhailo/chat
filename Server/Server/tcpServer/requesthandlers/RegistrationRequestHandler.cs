@@ -42,9 +42,20 @@ namespace Server.tcpServer.requesthandlers
                             PasswordEncryptor.nHash
                         );
 
-                    database.UserRepository.AddUser(new User { Username = username, Email = email, Hash = hash, Salt = salt });
-                    User u = database.UserRepository.GetUserByEmail(email);
-                    response = new Response { StatusCode = (int)HttpStatusCode.Created, Content = JsonSerializer.Serialize(u) };
+                    User u = new User { Username = username, Email = email, Hash = hash, Salt = salt };
+                    database.UserRepository.AddUser(u);
+                    response = new Response 
+                        { 
+                            StatusCode = (int)HttpStatusCode.Created, 
+                            Content = JsonSerializer.Serialize
+                                (
+                                    new
+                                    {
+                                        Username = u.Username, 
+                                        Email = u.Email,
+                                    }
+                                ) 
+                        };
                     stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response)));
                 }
                 else

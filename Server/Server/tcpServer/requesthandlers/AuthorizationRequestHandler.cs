@@ -44,7 +44,18 @@ namespace Server.tcpServer.requesthandlers
                     }
                     else
                     {
-                        response = new Response { StatusCode = (int)HttpStatusCode.OK, Content = JsonSerializer.Serialize(u) };
+                        response = new Response 
+                        {
+                            StatusCode = (int)HttpStatusCode.OK,
+                            Content = JsonSerializer.Serialize
+                                (
+                                    new
+                                    {
+                                        Username = u.Username,
+                                        Email = u.Email,
+                                    }
+                                )
+                        };
                         stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response)));
                     }  
                 }
