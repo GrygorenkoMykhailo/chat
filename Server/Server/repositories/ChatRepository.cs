@@ -14,7 +14,7 @@ namespace Server.repositories
 {
     public class ChatRepository
     {
-        public List<Chat>? GetChatsByUsername(string username)
+        public List<Chat>? GetChatsByEmail(string username)
         {
            using(AppContext context = new AppContext())
            {

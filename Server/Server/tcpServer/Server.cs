@@ -5,15 +5,25 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+
+using Server.classes;
+using Server.tcpServer.requesthandlers;
 
 namespace Server.tcpServer
 {
     public class Server
     {
-        private UserRepository _UserRepository = new UserRepository();
-        private ChatRepository _ChatRepository = new ChatRepository();
-        private MessageRepository _MessageRepository = new MessageRepository();
+        public delegate void MessageReceivedEventHandler(object sender, string message);
+        public event MessageReceivedEventHandler MessageReceived;
+        private Database Database = new Database();
+        private IHandler _StartHandler;
+
+        public Server()
+        {
+            _StartHandler = new RegistrationRequestHandler();
+        }
 
         public async Task Start(int port)
         {
@@ -31,22 +41,24 @@ namespace Server.tcpServer
                     {
                         using (NetworkStream stream = client.GetStream())
                         {
-                            bytesRead = stream.Read(buffer, 0, buffer.Length);
-                            string request = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                            try
+                            {
+                                bytesRead = stream.Read(buffer, 0, buffer.Length);
+                                string request = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                                MessageReceived.Invoke(this, request);
 
-                            string response = HandleRequest(request);
-
-                            byte[] responseBytes = Encoding.UTF8.GetBytes(response);
-                            stream.WriteAsync(responseBytes, 0, responseBytes.Length);
+                                Request req = JsonSerializer.Deserialize<Request>(request);
+                                _StartHandler.Handle(req, Database, stream);
+                            }
+                            catch
+                            {
+                                Response response = new Response { StatusCode = (int)HttpStatusCode.InternalServerError };
+                                stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response));
+                            }
                         }
                     }
                 }
             }
-        }
-
-        private string HandleRequest(string request)
-        {
-            return "OK";
         }
     }
 }

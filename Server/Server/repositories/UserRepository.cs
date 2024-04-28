@@ -28,7 +28,17 @@ namespace Server.repositories
             }
         }
 
-        public bool IsEmailValid(string email)
+        public void AddUser(User user) 
+        { 
+            using(AppContext context = new AppContext()) 
+            {
+                context.Users.Add(user);
+                context.SaveChanges();
+            }
+        }
+
+
+        public bool IsEmailExist(string email)
         {
             using (AppContext context = new AppContext())
             {
