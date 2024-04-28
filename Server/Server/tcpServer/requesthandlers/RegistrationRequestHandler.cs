@@ -11,6 +11,7 @@ using Response = Server.classes.Response;
 using System.Text.Json;
 using System.Net.Sockets;
 using System.Net;
+using Server.classes;
 
 namespace Server.tcpServer.requesthandlers
 {
@@ -41,8 +42,9 @@ namespace Server.tcpServer.requesthandlers
                             PasswordEncryptor.nHash
                         );
 
-                    database.UserRepository.AddUser(new classes.User { Username = username, Email = email, Hash = hash, Salt = salt });
-                    response = new Response { StatusCode = (int)HttpStatusCode.Created };
+                    database.UserRepository.AddUser(new User { Username = username, Email = email, Hash = hash, Salt = salt });
+                    User u = database.UserRepository.GetUserByEmail(email);
+                    response = new Response { StatusCode = (int)HttpStatusCode.Created, Content = JsonSerializer.Serialize(u) };
                     stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response)));
                 }
                 else
