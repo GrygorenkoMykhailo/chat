@@ -82,7 +82,6 @@
             Controls.Add(UserField);
             Name = "Login";
             Text = "TCP Chat";
-            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
         }

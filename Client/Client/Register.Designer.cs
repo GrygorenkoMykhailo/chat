@@ -34,8 +34,6 @@
             EmailRegisterField = new TextBox();
             Pass2RegisterField = new TextBox();
             UserRegisterField = new TextBox();
-            Pass2 = new Label();
-            Pass1 = new Label();
             SuspendLayout();
             // 
             // RegisterNewButton
@@ -81,6 +79,7 @@
             Pass2RegisterField.Size = new Size(174, 23);
             Pass2RegisterField.TabIndex = 6;
             Pass2RegisterField.UseSystemPasswordChar = true;
+          
             // 
             // UserRegisterField
             // 
@@ -89,32 +88,12 @@
             UserRegisterField.Size = new Size(174, 23);
             UserRegisterField.TabIndex = 5;
             // 
-            // Pass2
-            // 
-            Pass2.AutoSize = true;
-            Pass2.Location = new Point(184, 173);
-            Pass2.Name = "Pass2";
-            Pass2.Size = new Size(87, 15);
-            Pass2.TabIndex = 7;
-            Pass2.Text = "Repit Password";
-            // 
-            // Pass1
-            // 
-            Pass1.AutoSize = true;
-            Pass1.Location = new Point(184, 129);
-            Pass1.Name = "Pass1";
-            Pass1.Size = new Size(87, 15);
-            Pass1.TabIndex = 8;
-            Pass1.Text = "Enter Password";
-            // 
             // Register
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(477, 304);
-            Controls.Add(Pass1);
-            Controls.Add(Pass2);
             Controls.Add(UserRegisterField);
             Controls.Add(Pass2RegisterField);
             Controls.Add(EmailRegisterField);
@@ -123,7 +102,7 @@
             Controls.Add(RegisterNewButton);
             Name = "Register";
             Text = "Form1";
-            Load += Register_Load;
+           
             ResumeLayout(false);
             PerformLayout();
         }
@@ -136,8 +115,6 @@
         private TextBox EmailRegisterField;
         private TextBox Pass2RegisterField;
         private TextBox UserRegisterField;
-        private Label Pass2;
-        private Label Pass1;
 
 
     }
