@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,24 +9,41 @@ namespace Client
 {
     public partial class Register : Form
     {
+        private NetworkStream _stream;
+
         public Register()
         {
             InitializeComponent();
 
+            // Initialize network stream (connect to the server)
+            try
+            {
+                // Provide the appropriate server address and port number
+                TcpClient client = new TcpClient("serverAddress", 12345);
+                _stream = client.GetStream();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to initialize network stream: {ex.Message}");
+                return;
+            }
+
+            // Set initial form field values
             UserRegisterField.Text = "Enter UserName";
-            UserRegisterField.ForeColor = Color.Gray;
+            UserRegisterField.ForeColor = System.Drawing.Color.Gray;
 
             EmailRegisterField.Text = "Enter Email";
-            EmailRegisterField.ForeColor = Color.Gray;
+            EmailRegisterField.ForeColor = System.Drawing.Color.Gray;
 
             Pass1RegisterField.Text = "Enter Password";
-            Pass1RegisterField.ForeColor = Color.Gray;
+            Pass1RegisterField.ForeColor = System.Drawing.Color.Gray;
             Pass1RegisterField.UseSystemPasswordChar = false;
 
             Pass2RegisterField.Text = "Confirm Password";
-            Pass2RegisterField.ForeColor = Color.Gray;
+            Pass2RegisterField.ForeColor = System.Drawing.Color.Gray;
             Pass2RegisterField.UseSystemPasswordChar = false;
 
+            // Attach event handlers
             UserRegisterField.Enter += UserRegisterField_Enter;
             UserRegisterField.Leave += UserRegisterField_Leave;
 
@@ -52,7 +64,7 @@ namespace Client
             if (UserRegisterField.Text == "Enter UserName")
             {
                 UserRegisterField.Text = "";
-                UserRegisterField.ForeColor = Color.Black;
+                UserRegisterField.ForeColor = System.Drawing.Color.Black;
             }
         }
 
@@ -61,7 +73,7 @@ namespace Client
             if (UserRegisterField.Text == "")
             {
                 UserRegisterField.Text = "Enter UserName";
-                UserRegisterField.ForeColor = Color.Gray;
+                UserRegisterField.ForeColor = System.Drawing.Color.Gray;
             }
         }
 
@@ -70,7 +82,7 @@ namespace Client
             if (EmailRegisterField.Text == "Enter Email")
             {
                 EmailRegisterField.Text = "";
-                EmailRegisterField.ForeColor = Color.Black;
+                EmailRegisterField.ForeColor = System.Drawing.Color.Black;
             }
         }
 
@@ -79,17 +91,16 @@ namespace Client
             if (EmailRegisterField.Text == "")
             {
                 EmailRegisterField.Text = "Enter Email";
-                EmailRegisterField.ForeColor = Color.Gray;
+                EmailRegisterField.ForeColor = System.Drawing.Color.Gray;
             }
         }
 
         private void Pass1RegisterField_Enter(object sender, EventArgs e)
         {
-
             if (Pass1RegisterField.Text == "Enter Password")
             {
                 Pass1RegisterField.Text = "";
-                Pass1RegisterField.ForeColor = Color.Black;
+                Pass1RegisterField.ForeColor = System.Drawing.Color.Black;
                 Pass1RegisterField.UseSystemPasswordChar = true;
             }
         }
@@ -99,7 +110,7 @@ namespace Client
             if (Pass1RegisterField.Text == "")
             {
                 Pass1RegisterField.Text = "Enter Password";
-                Pass1RegisterField.ForeColor = Color.Gray;
+                Pass1RegisterField.ForeColor = System.Drawing.Color.Gray;
                 Pass1RegisterField.UseSystemPasswordChar = false;
             }
         }
@@ -109,7 +120,7 @@ namespace Client
             if (Pass2RegisterField.Text == "Confirm Password")
             {
                 Pass2RegisterField.Text = "";
-                Pass2RegisterField.ForeColor = Color.Black;
+                Pass2RegisterField.ForeColor = System.Drawing.Color.Black;
                 Pass2RegisterField.UseSystemPasswordChar = true;
             }
         }
@@ -119,11 +130,10 @@ namespace Client
             if (Pass2RegisterField.Text == "")
             {
                 Pass2RegisterField.Text = "Confirm Password";
-                Pass2RegisterField.ForeColor = Color.Gray;
+                Pass2RegisterField.ForeColor = System.Drawing.Color.Gray;
                 Pass2RegisterField.UseSystemPasswordChar = false;
             }
         }
-
 
         private async void RegisterButton_Click(object sender, EventArgs e)
         {
@@ -145,6 +155,13 @@ namespace Client
         {
             try
             {
+                if (_stream == null)
+                {
+                    MessageBox.Show("Network stream is not initialized.");
+                    return;
+                }
+
+                // Create and serialize the registration request
                 var registrationRequest = new
                 {
                     Type = "REGISTRATION",
@@ -157,20 +174,22 @@ namespace Client
                 };
 
                 string requestJson = JsonSerializer.Serialize(registrationRequest);
-
                 byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
+
+                // Send the request
                 await _stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
+                // Receive the response
                 byte[] buffer = new byte[1024];
                 int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
                 string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
+                // Deserialize the response
                 var response = JsonSerializer.Deserialize<Response>(responseJson);
 
-               
+                // Handle the response
                 if (response.StatusCode == (int)System.Net.HttpStatusCode.Created)
                 {
-                    
                     MessageBox.Show("Регистрация успешна!");
                     this.Hide();
                     Login login = new Login();
@@ -187,25 +206,19 @@ namespace Client
             }
         }
 
-        // Класс ответа сервера
+        // Class representing the server's response
         public class Response
         {
             public int StatusCode { get; set; }
             public string Content { get; set; }
         }
 
-     
-
+        // Back button event handler
         private void BackButton_Click(object sender, EventArgs e)
         {
             this.Hide();
             Login login = new Login();
             login.Show();
         }
-
-      
     }
 }
-  
-
-
