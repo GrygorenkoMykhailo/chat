@@ -14,22 +14,23 @@ namespace Server.tcpServer
         public static int nHash = 70;
 
 
-        public static string GenerateSalt(int nSalt)
+        public static string GenerateSalt(int saltSize)
         {
-            var saltBytes = new byte[nSalt];
-            using(var provider = new RNGCryptoServiceProvider())
+            byte[] saltBytes = new byte[saltSize];
+            using (var rng = new RNGCryptoServiceProvider())
             {
-                provider.GetNonZeroBytes(saltBytes);
+                rng.GetBytes(saltBytes);
             }
-            return Encoding.UTF8.GetString(saltBytes);
+            return Convert.ToBase64String(saltBytes);
         }
 
-        public static string HashPassword(string password, string salt, int nIterations, int nHash)
+        public static string HashPassword(string password, string salt, int iterations, int hashSize)
         {
-            var saltBytes = Convert.FromBase64String(salt);
-            using (var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, nIterations))
+            byte[] saltBytes = Convert.FromBase64String(salt);
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, saltBytes, iterations))
             {
-                return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(nHash));
+                byte[] hashBytes = pbkdf2.GetBytes(hashSize);
+                return Convert.ToBase64String(hashBytes);
             }
         }
     }

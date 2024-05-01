@@ -14,13 +14,22 @@ namespace Server.repositories
 {
     public class ChatRepository
     {
-        public List<Chat>? GetChatsByEmail(string username)
+        public List<Chat>? GetUserChatsByEmail(string email)
         {
            using(AppContext context = new AppContext())
            {
-                User? user = context.Users.Include(u => u.Chats).FirstOrDefault(u => u.Username == username);
+                User? user = context.Users.Include(u => u.Chats).FirstOrDefault(u => u.Email == email);
                 return user?.Chats;
            }    
+        }
+
+        public List<Chat>? GetUserChatsById(int id)
+        {
+            using (AppContext context = new AppContext())
+            {
+                User? user = context.Users.Include(u => u.Chats).FirstOrDefault(u => u.Id == id);
+                return user?.Chats;
+            }
         }
 
         public void DeleteChat(int id)

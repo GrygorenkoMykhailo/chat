@@ -23,6 +23,8 @@ namespace Server.tcpServer
         public Server()
         {
             _StartHandler = new RegistrationRequestHandler();
+            IHandler authorization = new AuthorizationRequestHandler();
+            _StartHandler.Next = authorization;
         }
 
         public async Task Start(int port)
@@ -50,10 +52,11 @@ namespace Server.tcpServer
                                 Request req = JsonSerializer.Deserialize<Request>(request);
                                 _StartHandler.Handle(req, Database, stream);
                             }
-                            catch
+                            catch(Exception ex)
                             {
                                 Response response = new Response { StatusCode = (int)HttpStatusCode.InternalServerError };
-                                stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response));
+                                MessageReceived.Invoke(this, ex.Message + "\n" + ex.GetType());
+                                stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(response)));
                             }
                         }
                     }

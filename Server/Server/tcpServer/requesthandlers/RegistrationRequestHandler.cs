@@ -51,6 +51,7 @@ namespace Server.tcpServer.requesthandlers
                                 (
                                     new
                                     {
+                                        Id = u.Id,
                                         Username = u.Username, 
                                         Email = u.Email,
                                     }
