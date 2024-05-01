@@ -41,6 +41,10 @@ namespace Server.tcpServer.requesthandlers
                     stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
                 }
             }
+            else
+            {
+                Next.Handle(req, database, stream);
+            }
         }
     }
 

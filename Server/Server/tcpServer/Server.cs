@@ -25,6 +25,12 @@ namespace Server.tcpServer
             _StartHandler = new RegistrationRequestHandler();
             IHandler authorization = new AuthorizationRequestHandler();
             _StartHandler.Next = authorization;
+            IHandler chatMessages = new ChatRequestHandler();
+            authorization.Next = chatMessages;
+            IHandler friendList = new FriendlistRequestHandler();
+            chatMessages.Next = friendList;
+            IHandler blackList = new BlackListRequestHandler();
+            friendList.Next = blackList;
         }
 
         public async Task Start(int port)

@@ -89,7 +89,7 @@ namespace Server.repositories
             }
         }
 
-        public void AddToBlackList(int id, int blockedId)
+        public void AddUserToBlackList(int id, int blockedId)
         {
             using (AppContext context = new AppContext())
             {
@@ -103,16 +103,46 @@ namespace Server.repositories
                 }
             }
         }
-        public void DeleteUserFromBlackList(int userId, int blockedId)
+        public void RemoveUserFromBlackList(int userId, int blockedId)
         {
             using(AppContext context = new AppContext())
             {
                 User? user = context.Users.Include(u => u.Blocked).FirstOrDefault(u => u.Id == userId);
                 User? userToRemove = context.Users.FirstOrDefault(u => u.Id == blockedId);
 
-                if(userToRemove != null)
+                if(userToRemove != null && user != null)
                 {
                     context.Users.Remove(userToRemove);
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void AddUserToFriendList(int sender, int target)
+        {
+            using (AppContext context = new AppContext())
+            {
+                User? user = context.Users.Include(u => u.Friends).FirstOrDefault(u => u.Id == sender);
+                User? targetUser = context.Users.FirstOrDefault(u => u.Id == target);
+
+                if(user != null && targetUser != null)
+                {
+                    user.Friends.Add(targetUser);
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void RemoveUserFromFriendList(int sender, int target)
+        {
+            using (AppContext context = new AppContext())
+            {
+                User? user = context.Users.Include(u => u.Friends).FirstOrDefault(u => u.Id == sender);
+                User? targetUser = context.Users.FirstOrDefault(u => u.Id == target);
+
+                if (user != null && targetUser != null)
+                {
+                    user.Friends.Remove(targetUser);
                     context.SaveChanges();
                 }
             }
