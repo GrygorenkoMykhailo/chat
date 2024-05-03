@@ -36,6 +36,8 @@ namespace Client
             BlacklListTimer.Tick += BlacklListpdateTimer_Tick;
 
             chatUpdateTimer.Start();
+            FriendsListTimer.Start();
+            BlacklListTimer.Start();
         }
 
         private void BlacklListpdateTimer_Tick(object? sender, EventArgs e)
