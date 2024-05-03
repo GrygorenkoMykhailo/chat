@@ -11,21 +11,26 @@ namespace Client
 {
     public partial class Login : Form
     {
-       
+
         private NetworkStream _stream;
-    
+
         public Login()
         {
             InitializeComponent();
             InitializeNetworkStream();
 
             UserField.Text = "Enter Email";
-            UserField.ForeColor = Color.Gray;
+            UserField.ForeColor = System.Drawing.Color.Gray;
+
             PassField.Text = "Enter Password";
-            PassField.ForeColor = Color.Gray;
+            PassField.ForeColor = System.Drawing.Color.Gray;
             PassField.UseSystemPasswordChar = false;
 
+            UserField.Enter += UserField_Enter;
+            UserField.Leave += UserField_Leave;
 
+            PassField.Enter += PassField_Enter;
+            PassField.Leave += PassField_Leave;
         }
         private void InitializeNetworkStream()
         {
@@ -40,11 +45,11 @@ namespace Client
             }
         }
 
-            private void UserField_Enter(object sender, EventArgs e)
+        private void UserField_Enter(object sender, EventArgs e)
         {
             if (UserField.Text == "Enter UserName")
             {
-               UserField.Text = "";
+                UserField.Text = "";
                 UserField.ForeColor = System.Drawing.Color.Black;
             }
         }
@@ -68,7 +73,7 @@ namespace Client
             }
         }
 
-        private void Pass1RegisterField_Leave(object sender, EventArgs e)
+        private void PassField_Leave(object sender, EventArgs e)
         {
             if (PassField.Text == "")
             {
@@ -106,7 +111,7 @@ namespace Client
                 {
                     SaveAuthToken(response.Content);
 
-                    
+
                     MessageBox.Show("Авторизация успешна!");
                     this.Hide();
                     MainForm mainForm = new MainForm();
@@ -123,6 +128,23 @@ namespace Client
             }
         }
 
+        private void LoginButton_Click(object sender, EventArgs e)
+        {
+            string email = UserField.Text;
+            string password = PassField.Text;
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Введите электронную почту и пароль.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            SendAuthorizationRequest(email, password);
+        }
+    
+        
+    
+    
         private void SaveAuthToken(string token)
         {
             string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "authToken.txt");
