@@ -79,7 +79,6 @@
             Pass2RegisterField.Size = new Size(174, 23);
             Pass2RegisterField.TabIndex = 6;
             Pass2RegisterField.UseSystemPasswordChar = true;
-          
             // 
             // UserRegisterField
             // 
@@ -102,7 +101,6 @@
             Controls.Add(RegisterNewButton);
             Name = "Register";
             Text = "Form1";
-           
             ResumeLayout(false);
             PerformLayout();
         }

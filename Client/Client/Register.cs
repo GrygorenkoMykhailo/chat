@@ -15,11 +15,9 @@ namespace Client
         {
             InitializeComponent();
 
-            // Initialize network stream (connect to the server)
             try
             {
-                // Provide the appropriate server address and port number
-                TcpClient client = new TcpClient("serverAddress", 12345);
+                TcpClient client = new TcpClient("127.0.0.1", 8000);
                 _stream = client.GetStream();
             }
             catch (Exception ex)
@@ -28,7 +26,6 @@ namespace Client
                 return;
             }
 
-            // Set initial form field values
             UserRegisterField.Text = "Enter UserName";
             UserRegisterField.ForeColor = System.Drawing.Color.Gray;
 
@@ -43,7 +40,6 @@ namespace Client
             Pass2RegisterField.ForeColor = System.Drawing.Color.Gray;
             Pass2RegisterField.UseSystemPasswordChar = false;
 
-            // Attach event handlers
             UserRegisterField.Enter += UserRegisterField_Enter;
             UserRegisterField.Leave += UserRegisterField_Leave;
 
@@ -161,7 +157,6 @@ namespace Client
                     return;
                 }
 
-                // Create and serialize the registration request
                 var registrationRequest = new
                 {
                     Type = "REGISTRATION",
@@ -176,18 +171,14 @@ namespace Client
                 string requestJson = JsonSerializer.Serialize(registrationRequest);
                 byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
 
-                // Send the request
                 await _stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
-                // Receive the response
                 byte[] buffer = new byte[1024];
                 int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
                 string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-                // Deserialize the response
                 var response = JsonSerializer.Deserialize<Response>(responseJson);
 
-                // Handle the response
                 if (response.StatusCode == (int)System.Net.HttpStatusCode.Created)
                 {
                     MessageBox.Show("Регистрация успешна!");
@@ -206,14 +197,12 @@ namespace Client
             }
         }
 
-        // Class representing the server's response
         public class Response
         {
             public int StatusCode { get; set; }
             public string Content { get; set; }
         }
 
-        // Back button event handler
         private void BackButton_Click(object sender, EventArgs e)
         {
             this.Hide();

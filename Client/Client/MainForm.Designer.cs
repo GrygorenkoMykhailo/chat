@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Client
 {
-    partial class Form1
+    partial class MainForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -24,20 +24,19 @@ namespace Client
             ChatBox = new TextBox();
             FriendListChat = new ComboBox();
             StartChat = new Button();
-            BlackList = new ComboBox();
             AddBlackList = new Button();
             AddFriendList = new Button();
             LabelFriendList = new Label();
             LabelAddFriednList = new Label();
             LabelBlackList = new Label();
-            comboBox1 = new ComboBox();
+            RemoveBlacklist = new ComboBox();
             LabelRemoveBlackList = new Label();
-            button1 = new Button();
+            RemoveBlackButton = new Button();
             RemoveFriendList = new ComboBox();
             LabelRemovFriendLost = new Label();
-            RemoveFriend = new Button();
+            RemoveButton = new Button();
             LabelAddFriendList = new Label();
-            textBox1 = new TextBox();
+            SearchUser = new TextBox();
             SearchChatStart = new Button();
             LabelSearch = new Label();
             AddFriensField = new TextBox();
@@ -46,6 +45,7 @@ namespace Client
             StartGroupChat = new Label();
             ChatList = new ComboBox();
             ConnectChatButton = new Button();
+            AddBlacklistField = new TextBox();
             SuspendLayout();
             // 
             // MassageSend
@@ -88,14 +88,6 @@ namespace Client
             StartChat.TabIndex = 4;
             StartChat.Text = "Chat";
             StartChat.UseVisualStyleBackColor = true;
-            // 
-            // BlackList
-            // 
-            BlackList.FormattingEnabled = true;
-            BlackList.Location = new Point(12, 288);
-            BlackList.Name = "BlackList";
-            BlackList.Size = new Size(187, 23);
-            BlackList.TabIndex = 5;
             // 
             // AddBlackList
             // 
@@ -142,13 +134,13 @@ namespace Client
             LabelBlackList.TabIndex = 11;
             LabelBlackList.Text = "Add To Black List";
             // 
-            // comboBox1
+            // RemoveBlacklist
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(12, 332);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(187, 23);
-            comboBox1.TabIndex = 12;
+            RemoveBlacklist.FormattingEnabled = true;
+            RemoveBlacklist.Location = new Point(12, 332);
+            RemoveBlacklist.Name = "RemoveBlacklist";
+            RemoveBlacklist.Size = new Size(187, 23);
+            RemoveBlacklist.TabIndex = 12;
             // 
             // LabelRemoveBlackList
             // 
@@ -159,14 +151,14 @@ namespace Client
             LabelRemoveBlackList.TabIndex = 13;
             LabelRemoveBlackList.Text = "Remove From Black List";
             // 
-            // button1
+            // RemoveBlackButton
             // 
-            button1.Location = new Point(205, 331);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 14;
-            button1.Text = "Remove";
-            button1.UseVisualStyleBackColor = true;
+            RemoveBlackButton.Location = new Point(205, 331);
+            RemoveBlackButton.Name = "RemoveBlackButton";
+            RemoveBlackButton.Size = new Size(75, 23);
+            RemoveBlackButton.TabIndex = 14;
+            RemoveBlackButton.Text = "Remove";
+            RemoveBlackButton.UseVisualStyleBackColor = true;
             // 
             // RemoveFriendList
             // 
@@ -185,14 +177,14 @@ namespace Client
             LabelRemovFriendLost.TabIndex = 16;
             LabelRemovFriendLost.Text = "Remove From Friend List";
             // 
-            // RemoveFriend
+            // RemoveButton
             // 
-            RemoveFriend.Location = new Point(205, 199);
-            RemoveFriend.Name = "RemoveFriend";
-            RemoveFriend.Size = new Size(75, 23);
-            RemoveFriend.TabIndex = 17;
-            RemoveFriend.Text = "Remove";
-            RemoveFriend.UseVisualStyleBackColor = true;
+            RemoveButton.Location = new Point(205, 199);
+            RemoveButton.Name = "RemoveButton";
+            RemoveButton.Size = new Size(75, 23);
+            RemoveButton.TabIndex = 17;
+            RemoveButton.Text = "Remove";
+            RemoveButton.UseVisualStyleBackColor = true;
             // 
             // LabelAddFriendList
             // 
@@ -203,12 +195,12 @@ namespace Client
             LabelAddFriendList.TabIndex = 18;
             LabelAddFriendList.Text = "Add to Friend List";
             // 
-            // textBox1
+            // SearchUser
             // 
-            textBox1.Location = new Point(12, 69);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(187, 23);
-            textBox1.TabIndex = 19;
+            SearchUser.Location = new Point(12, 69);
+            SearchUser.Name = "SearchUser";
+            SearchUser.Size = new Size(187, 23);
+            SearchUser.TabIndex = 19;
             // 
             // SearchChatStart
             // 
@@ -278,12 +270,20 @@ namespace Client
             ConnectChatButton.Text = "Connect";
             ConnectChatButton.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // AddBlacklistField
+            // 
+            AddBlacklistField.Location = new Point(16, 289);
+            AddBlacklistField.Name = "AddBlacklistField";
+            AddBlacklistField.Size = new Size(187, 23);
+            AddBlacklistField.TabIndex = 29;
+            // 
+            // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(800, 450);
+            Controls.Add(AddBlacklistField);
             Controls.Add(ConnectChatButton);
             Controls.Add(ChatList);
             Controls.Add(StartGroupChat);
@@ -292,25 +292,24 @@ namespace Client
             Controls.Add(AddFriensField);
             Controls.Add(LabelSearch);
             Controls.Add(SearchChatStart);
-            Controls.Add(textBox1);
+            Controls.Add(SearchUser);
             Controls.Add(LabelAddFriendList);
-            Controls.Add(RemoveFriend);
+            Controls.Add(RemoveButton);
             Controls.Add(LabelRemovFriendLost);
             Controls.Add(RemoveFriendList);
-            Controls.Add(button1);
+            Controls.Add(RemoveBlackButton);
             Controls.Add(LabelRemoveBlackList);
-            Controls.Add(comboBox1);
+            Controls.Add(RemoveBlacklist);
             Controls.Add(LabelBlackList);
             Controls.Add(LabelFriendList);
             Controls.Add(AddFriendList);
             Controls.Add(AddBlackList);
-            Controls.Add(BlackList);
             Controls.Add(StartChat);
             Controls.Add(FriendListChat);
             Controls.Add(ChatBox);
             Controls.Add(MassegeBox);
             Controls.Add(MassageSend);
-            Name = "Form1";
+            Name = "Main";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
@@ -327,14 +326,14 @@ namespace Client
         private Label LabelFriendList;
         private Label LabelAddFriednList;
         private Label LabelBlackList;
-        private ComboBox comboBox1;
+        private ComboBox RemoveBlacklist;
         private Label LabelRemoveBlackList;
-        private Button button1;
+        private Button RemoveBlackButton;
         private ComboBox RemoveFriendList;
         private Label LabelRemovFriendLost;
-        private Button RemoveFriend;
+        private Button RemoveButton;
         private Label LabelAddFriendList;
-        private TextBox textBox1;
+        private TextBox SearchUser;
         private Button SearchChatStart;
         private Label LabelSearch;
         private TextBox AddFriensField;
@@ -343,5 +342,6 @@ namespace Client
         private Label StartGroupChat;
         private ComboBox ChatList;
         private Button ConnectChatButton;
+        private TextBox AddBlacklistField;
     }
 }
