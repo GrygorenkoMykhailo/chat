@@ -88,6 +88,7 @@ namespace Client
             StartChat.TabIndex = 4;
             StartChat.Text = "Chat";
             StartChat.UseVisualStyleBackColor = true;
+            StartChat.Click += StartChat_Click;
             // 
             // AddBlackList
             // 
@@ -97,6 +98,7 @@ namespace Client
             AddBlackList.TabIndex = 6;
             AddBlackList.Text = "Add";
             AddBlackList.UseVisualStyleBackColor = true;
+            AddBlackList.Click += AddBlackList_Click;
             // 
             // AddFriendList
             // 
@@ -106,6 +108,7 @@ namespace Client
             AddFriendList.TabIndex = 8;
             AddFriendList.Text = "Add";
             AddFriendList.UseVisualStyleBackColor = true;
+            AddFriendList.Click += AddFriendList_Click;
             // 
             // LabelFriendList
             // 
@@ -159,6 +162,7 @@ namespace Client
             RemoveBlackButton.TabIndex = 14;
             RemoveBlackButton.Text = "Remove";
             RemoveBlackButton.UseVisualStyleBackColor = true;
+            RemoveBlackButton.Click += RemoveBlackButton_Click;
             // 
             // RemoveFriendList
             // 
@@ -185,6 +189,7 @@ namespace Client
             RemoveButton.TabIndex = 17;
             RemoveButton.Text = "Remove";
             RemoveButton.UseVisualStyleBackColor = true;
+            RemoveButton.Click += RemoveButton_Click;
             // 
             // LabelAddFriendList
             // 
@@ -277,7 +282,7 @@ namespace Client
             AddBlacklistField.Size = new Size(187, 23);
             AddBlacklistField.TabIndex = 29;
             // 
-            // Main
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -309,7 +314,7 @@ namespace Client
             Controls.Add(ChatBox);
             Controls.Add(MassegeBox);
             Controls.Add(MassageSend);
-            Name = "Main";
+            Name = "MainForm";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();

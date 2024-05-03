@@ -11,13 +11,13 @@ namespace Client
 {
     public partial class Login : Form
     {
-
-        private NetworkStream _stream;
+        
 
         public Login()
         {
+
             InitializeComponent();
-            InitializeNetworkStream();
+            
 
             UserField.Text = "Enter Email";
             UserField.ForeColor = System.Drawing.Color.Gray;
@@ -32,16 +32,18 @@ namespace Client
             PassField.Enter += PassField_Enter;
             PassField.Leave += PassField_Leave;
         }
-        private void InitializeNetworkStream()
+        private NetworkStream InitializeNetworkStream()
         {
             try
             {
                 TcpClient client = new TcpClient("127.0.0.1", 8000);
-                _stream = client.GetStream();
+                NetworkStream stream = client.GetStream();
+                return stream;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to initialize network stream: {ex.Message}");
+                MessageBox.Show($"Ошибка при инициализации сетевого соединения: {ex.Message}");
+                return null;
             }
         }
 
@@ -83,33 +85,63 @@ namespace Client
             }
         }
 
+        private void SaveAuthToken(string token, int id, string tag)
+        {
+            AuthData authData = new AuthData
+            {
+                Token = token,
+                ID = id,
+                Tag = tag
+
+            };
+
+            string jsonData = JsonSerializer.Serialize(authData);
+
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "authData.json");
+
+            if (!File.Exists(filePath))
+            {
+                File.Create(filePath).Dispose();
+            }
+
+            File.WriteAllText(filePath, jsonData);
+        }
+
         private async void SendAuthorizationRequest(string email, string password)
         {
+            NetworkStream stream = InitializeNetworkStream();
+            if (stream == null)
+            {
+                MessageBox.Show("Ошибка при инициализации сетевого соединения.");
+                return;
+            }
             try
             {
                 var authorizationRequest = new
                 {
                     Type = "AUTHORIZATION",
-                    Content = new
+                    Content = JsonSerializer.Serialize(new
                     {
                         Email = email,
                         Password = password
-                    }
+                    })
                 };
 
                 string requestJson = JsonSerializer.Serialize(authorizationRequest);
                 byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
-                await _stream.WriteAsync(requestBytes, 0, requestBytes.Length);
+                await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
                 byte[] buffer = new byte[1024];
-                int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
+                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
                 var response = JsonSerializer.Deserialize<Response>(responseJson);
 
                 if (response.StatusCode == (int)System.Net.HttpStatusCode.OK)
                 {
-                    SaveAuthToken(response.Content);
+                    var authData = JsonSerializer.Deserialize<AuthData>(response.Content);
+
+                    SaveAuthToken(authData.Token, authData.ID, authData.Tag);
 
 
                     MessageBox.Show("Авторизация успешна!");
@@ -127,6 +159,8 @@ namespace Client
                 MessageBox.Show($"Ошибка при отправке запроса авторизации: {ex.Message}");
             }
         }
+       
+
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
@@ -145,17 +179,7 @@ namespace Client
         
     
     
-        private void SaveAuthToken(string token)
-        {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "authToken.txt");
-
-            if (File.Exists(filePath))
-            {
-                File.WriteAllText(filePath, string.Empty);
-            }
-
-            File.WriteAllText(filePath, token);
-        }
+      
 
 
         private void RegisterButton_Click(object sender, EventArgs e)
@@ -170,7 +194,12 @@ namespace Client
             public int StatusCode { get; set; }
             public string Content { get; set; }
         }
+        public class AuthData
+        {
+            public string Token { get; set; }
+            public int ID { get; set; }
+            public string Tag { get; set; }
+        }
 
-     
     }
 }

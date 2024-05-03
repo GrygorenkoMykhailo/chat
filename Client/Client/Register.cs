@@ -9,22 +9,11 @@ namespace Client
 {
     public partial class Register : Form
     {
-        private NetworkStream _stream;
+       
 
         public Register()
         {
             InitializeComponent();
-
-            try
-            {
-                TcpClient client = new TcpClient("127.0.0.1", 8000);
-                _stream = client.GetStream();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to initialize network stream: {ex.Message}");
-                return;
-            }
 
             UserRegisterField.Text = "Enter UserName";
             UserRegisterField.ForeColor = System.Drawing.Color.Gray;
@@ -55,6 +44,20 @@ namespace Client
             RegisterNewButton.Click += RegisterButton_Click;
         }
 
+        private NetworkStream InitializeNetworkStream()
+        {
+            try
+            {
+                TcpClient client = new TcpClient("127.0.0.1", 8000);
+                NetworkStream stream = client.GetStream();
+                return stream;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при инициализации сетевого соединения: {ex.Message}");
+                return null;
+            }
+        }
         private void UserRegisterField_Enter(object sender, EventArgs e)
         {
             if (UserRegisterField.Text == "Enter UserName")
@@ -149,32 +152,33 @@ namespace Client
 
         private async Task SendRegistrationRequest(string username, string email, string password)
         {
+            NetworkStream stream = InitializeNetworkStream();
+            if (stream == null)
+            {
+                MessageBox.Show("Ошибка при инициализации сетевого соединения.");
+                return;
+            }
             try
             {
-                if (_stream == null)
-                {
-                    MessageBox.Show("Network stream is not initialized.");
-                    return;
-                }
 
                 var registrationRequest = new
                 {
                     Type = "REGISTRATION",
-                    Content = new
+                    Content = JsonSerializer.Serialize(new
                     {
                         Username = username,
                         Email = email,
                         Password = password
-                    }
+                    })
                 };
 
                 string requestJson = JsonSerializer.Serialize(registrationRequest);
                 byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
 
-                await _stream.WriteAsync(requestBytes, 0, requestBytes.Length);
+                await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
                 byte[] buffer = new byte[1024];
-                int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
+                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
                 var response = JsonSerializer.Deserialize<Response>(responseJson);

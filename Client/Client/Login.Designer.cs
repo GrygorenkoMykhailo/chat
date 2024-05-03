@@ -58,6 +58,7 @@
             LoginButton.TabIndex = 3;
             LoginButton.Text = "Log In";
             LoginButton.UseVisualStyleBackColor = true;
+            LoginButton.Click += LoginButton_Click;
             // 
             // RegisterButton
             // 
