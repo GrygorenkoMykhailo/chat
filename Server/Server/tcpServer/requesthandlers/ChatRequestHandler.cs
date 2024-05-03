@@ -41,6 +41,23 @@ namespace Server.tcpServer.requesthandlers
                     stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
                 }
             }
+            else if (req.Type == "GET USER CHATS")
+            {
+                var request = JsonSerializer.Deserialize<GetChatsRequest>(req.Content);
+
+                List<Chat>? chats = database.ChatRepository.GetUserChatsById(request.UserId);
+
+                if (chats != null)
+                {
+                    Response res = new Response { StatusCode = (int)HttpStatusCode.OK, Content = JsonSerializer.Serialize(chats) };
+                    stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
+                }
+                else
+                {
+                    Response res = new Response { StatusCode = (int)HttpStatusCode.NotFound };
+                    stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
+                }
+            }
             else
             {
                 Next.Handle(req, database, stream);
@@ -51,5 +68,10 @@ namespace Server.tcpServer.requesthandlers
     public class GetChatMessagesRequest
     {
         public int ChatId { get; set; }
+    }
+
+    public class GetChatsRequest
+    {
+        public int UserId { get; set; }
     }
 }

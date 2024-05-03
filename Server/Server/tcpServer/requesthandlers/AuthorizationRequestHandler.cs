@@ -54,6 +54,7 @@ namespace Server.tcpServer.requesthandlers
                                         Id = u.Id,
                                         Username = u.Username,
                                         Email = u.Email,
+                                        Tag = u.Tag,
                                         Chats = u.Chats,
                                         Friends = u.Friends,
                                         Blocked = u.Blocked,

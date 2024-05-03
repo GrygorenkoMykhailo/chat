@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Net.Sockets;
 using System.Net;
 using Server.classes;
+using System.Security.Cryptography;
 
 namespace Server.tcpServer.requesthandlers
 {
@@ -42,7 +43,7 @@ namespace Server.tcpServer.requesthandlers
                             PasswordEncryptor.nHash
                         );
 
-                    User u = new User { Username = username, Email = email, Hash = hash, Salt = salt };
+                    User u = new User { Username = username, Email = email, Tag = GenerateTag(), Hash = hash, Salt = salt };
                     database.UserRepository.AddUser(u);
                     response = new Response 
                         { 
@@ -54,6 +55,7 @@ namespace Server.tcpServer.requesthandlers
                                         Id = u.Id,
                                         Username = u.Username, 
                                         Email = u.Email,
+                                        Tag = u.Tag,
                                     }
                                 ) 
                         };
@@ -76,6 +78,16 @@ namespace Server.tcpServer.requesthandlers
             public string Username { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
+        }
+
+        public string GenerateTag()
+        {
+            byte[] bytes = new byte[64];
+            using(RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider())
+            {
+                provider.GetNonZeroBytes(bytes);
+            }
+            return Encoding.UTF8.GetString(bytes);
         }
     }
 }

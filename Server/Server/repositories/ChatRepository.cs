@@ -9,6 +9,7 @@ using Message = Server.classes.Message;
 using Server.classes;
 using Microsoft.EntityFrameworkCore;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Net.Mime;
 
 namespace Server.repositories
 {
@@ -29,6 +30,20 @@ namespace Server.repositories
             {
                 User? user = context.Users.Include(u => u.Chats).FirstOrDefault(u => u.Id == id);
                 return user?.Chats;
+            }
+        }
+
+        public void AddMessageToChat(int chatId, Message message)
+        {
+            using (AppContext context = new AppContext())
+            {
+                Chat? chat = context.Chats.FirstOrDefault(c => c.Id == chatId);
+
+                if (chat != null)
+                {
+                    chat.Messages.Add(message);
+                    context.SaveChanges();
+                }
             }
         }
 

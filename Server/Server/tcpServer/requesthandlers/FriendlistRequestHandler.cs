@@ -27,7 +27,7 @@ namespace Server.tcpServer.requesthandlers
 
                 database.UserRepository.AddUserToFriendList(request.SenderId, request.TargetId);
 
-                Response response = new Response { StatusCode = (int)HttpStatusCode.OK };
+                Response response = new Response { StatusCode = (int)HttpStatusCode.OK, Content = JsonSerializer.Serialize("") };
                 stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
             }
@@ -36,8 +36,26 @@ namespace Server.tcpServer.requesthandlers
                 var request = JsonSerializer.Deserialize<FriendListRequest>(req.Content);
 
                 database.UserRepository.RemoveUserFromFriendList(request.SenderId, request.TargetId);
-                Response response = new Response { StatusCode = (int)HttpStatusCode.OK };
+                Response response = new Response { StatusCode = (int)HttpStatusCode.OK, Content = JsonSerializer.Serialize("") };
                 stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
+            }
+            else if(req.Type == "GET FRIND LIST")
+            {
+                var request = JsonSerializer.Deserialize<GetFriendListRequest>(req.Content);
+
+                List<User>? friends = database.UserRepository.GetUserFriends(request.UserId);
+
+                Response res;
+                if(friends != null)
+                {
+                    res = new Response { StatusCode = (int)HttpStatusCode.OK, Content = JsonSerializer.Serialize(friends) };
+                    stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
+                }
+                else
+                {
+                    res = new Response { StatusCode = (int)HttpStatusCode.NotFound };
+                    stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
+                }
             }
             else
             {
@@ -49,6 +67,12 @@ namespace Server.tcpServer.requesthandlers
         {
             public int SenderId { get; set; }
             public int TargetId { get; set; }   
+        }
+
+        //GET FRIEND LIST
+        public class GetFriendListRequest
+        {
+            public int UserId { get; set; }
         }
     }
 }

@@ -71,6 +71,7 @@ namespace Server.contexts
                     });
 
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.Tag).IsUnique();
         }
 
         public void AddInitialData()

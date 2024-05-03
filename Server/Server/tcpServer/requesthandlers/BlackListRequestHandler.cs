@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Net.Sockets;
 using System.Net;
 using Server.classes;
+using static Server.tcpServer.requesthandlers.FriendlistRequestHandler;
 
 namespace Server.tcpServer.requesthandlers
 {
@@ -40,6 +41,24 @@ namespace Server.tcpServer.requesthandlers
                 Response response = new Response { StatusCode = (int)HttpStatusCode.OK };
                 stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
             }
+            else if (req.Type == "GET BLACKLIST")
+            {
+                var request = JsonSerializer.Deserialize<GetFriendListRequest>(req.Content);
+
+                List<User>? blocked = database.UserRepository.GetUserBlockedUsers(request.UserId);
+
+                Response res;
+                if (blocked != null)
+                {
+                    res = new Response { StatusCode = (int)HttpStatusCode.OK, Content = JsonSerializer.Serialize(blocked) };
+                    stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
+                }
+                else
+                {
+                    res = new Response { StatusCode = (int)HttpStatusCode.NotFound };
+                    stream.Write(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(res)));
+                }
+            }
             else
             {
                 Next.Handle(req, database, stream);
@@ -50,6 +69,12 @@ namespace Server.tcpServer.requesthandlers
         {
             public int SenderId { get; set; }
             public int TargetId { get; set; }
+        }
+
+        //GET BLACKLIST
+        public class GetBlackListRequest
+        {
+            public int UserId { get; set; }
         }
     }
 }

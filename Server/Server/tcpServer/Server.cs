@@ -31,6 +31,8 @@ namespace Server.tcpServer
             chatMessages.Next = friendList;
             IHandler blackList = new BlackListRequestHandler();
             friendList.Next = blackList;
+            IHandler messages = new MessageRequestHandler();
+            blackList.Next = messages;
         }
 
         public async Task Start(int port)

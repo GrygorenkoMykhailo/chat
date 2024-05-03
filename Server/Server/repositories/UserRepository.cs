@@ -37,6 +37,14 @@ namespace Server.repositories
             }
         }
 
+        public User? GetUserByTag(string tag)
+        {
+            using (AppContext context = new AppContext())
+            {
+                return context.Users.FirstOrDefault(u =>  u.Tag == tag);
+            }
+        }
+
         public void AddUser(User user) 
         { 
             using(AppContext context = new AppContext()) 
@@ -96,9 +104,9 @@ namespace Server.repositories
                 User? user = context.Users.Include(u => u.Blocked).FirstOrDefault(u => u.Id == id);
                 User? userToBlock = context.Users.FirstOrDefault(u => u.Id == blockedId);
 
-                if(userToBlock != null)
+                if(userToBlock != null && user != null)
                 {
-                    user?.Blocked.Add(userToBlock);
+                    user.Blocked.Add(userToBlock);
                     context.SaveChanges();
                 }
             }
@@ -112,7 +120,7 @@ namespace Server.repositories
 
                 if(userToRemove != null && user != null)
                 {
-                    context.Users.Remove(userToRemove);
+                    user.Blocked.Remove(userToRemove);
                     context.SaveChanges();
                 }
             }
