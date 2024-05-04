@@ -19,8 +19,8 @@ namespace Client
 
         private void InitializeComponent()
         {
-            MassageSend = new Button();
-            MassegeBox = new TextBox();
+            SendMessageButton = new Button();
+            MessageTextField = new TextBox();
             ChatBox = new TextBox();
             FriendListChat = new ComboBox();
             StartChat = new Button();
@@ -50,21 +50,22 @@ namespace Client
             LabelTag = new Label();
             SuspendLayout();
             // 
-            // MassageSend
+            // SendMessageButton
             // 
-            MassageSend.Location = new Point(713, 415);
-            MassageSend.Name = "MassageSend";
-            MassageSend.Size = new Size(75, 23);
-            MassageSend.TabIndex = 0;
-            MassageSend.Text = "Send";
-            MassageSend.UseVisualStyleBackColor = true;
+            SendMessageButton.Location = new Point(713, 415);
+            SendMessageButton.Name = "SendMessageButton";
+            SendMessageButton.Size = new Size(75, 23);
+            SendMessageButton.TabIndex = 0;
+            SendMessageButton.Text = "Send";
+            SendMessageButton.UseVisualStyleBackColor = true;
+            SendMessageButton.Click += SendMessageButton_Click;
             // 
-            // MassegeBox
+            // MessageTextField
             // 
-            MassegeBox.Location = new Point(286, 416);
-            MassegeBox.Name = "MassegeBox";
-            MassegeBox.Size = new Size(421, 23);
-            MassegeBox.TabIndex = 1;
+            MessageTextField.Location = new Point(286, 416);
+            MessageTextField.Name = "MessageTextField";
+            MessageTextField.Size = new Size(421, 23);
+            MessageTextField.TabIndex = 1;
             // 
             // ChatBox
             // 
@@ -334,16 +335,16 @@ namespace Client
             Controls.Add(StartChat);
             Controls.Add(FriendListChat);
             Controls.Add(ChatBox);
-            Controls.Add(MassegeBox);
-            Controls.Add(MassageSend);
+            Controls.Add(MessageTextField);
+            Controls.Add(SendMessageButton);
             Name = "MainForm";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();
         }
 
-        private Button MassageSend;
-        private TextBox MassegeBox;
+        private Button SendMessageButton;
+        private TextBox MessageTextField;
         private TextBox ChatBox;
         private ComboBox FriendListChat;
         private Button StartChat;

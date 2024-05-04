@@ -199,6 +199,7 @@ namespace Client
             {
                 MessageBox.Show($"Ошибка при отправке запроса регистрации: {ex.Message}");
             }
+            stream.Close();
         }
 
         public class Response

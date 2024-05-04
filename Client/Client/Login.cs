@@ -163,6 +163,7 @@ namespace Client
             {
                 MessageBox.Show($"Ошибка при отправке запроса авторизации: {ex.Message}");
             }
+            stream.Close();
         }
        
 
