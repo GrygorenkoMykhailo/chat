@@ -1,5 +1,4 @@
-﻿using Client.classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Sockets;
@@ -8,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Client.Login;
+using Client.classes;
 
 namespace Client
 {

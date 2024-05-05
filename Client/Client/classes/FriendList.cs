@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Server.classes;
+using Client.classes;
 
-namespace Server.classes
+namespace Client.classes
 {
     public class FriendList
     {

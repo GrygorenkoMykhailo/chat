@@ -17,3 +17,22 @@ F:\C#\Cursach\chat\Client\Client\obj\Debug\net8.0-windows\ref\Client.dll
 F:\C#\Cursach\chat\Client\Client\obj\Debug\net8.0-windows\Client.Login.resources
 F:\C#\Cursach\chat\Client\Client\obj\Debug\net8.0-windows\Client.Register.resources
 F:\C#\Cursach\chat\Client\Client\obj\Debug\net8.0-windows\Client.MainForm.resources
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.Login.resources
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.MainForm.resources
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.Register.resources
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.csproj.GenerateResource.cache
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.GeneratedMSBuildEditorConfig.editorconfig
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.AssemblyInfoInputs.cache
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.AssemblyInfo.cs
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.csproj.CoreCompileInputs.cache
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.sourcelink.json
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.dll
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\refint\Client.dll
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.pdb
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\bin\Debug\net8.0-windows\Client.exe
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\bin\Debug\net8.0-windows\Client.deps.json
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\bin\Debug\net8.0-windows\Client.runtimeconfig.json
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\bin\Debug\net8.0-windows\Client.dll
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\bin\Debug\net8.0-windows\Client.pdb
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\Client.genruntimeconfig.cache
+D:\шаг получается\до диез\Cursach\client\chat\Client\Client\obj\Debug\net8.0-windows\ref\Client.dll
