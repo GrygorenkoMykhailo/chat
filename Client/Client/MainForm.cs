@@ -7,6 +7,8 @@ using System.Net.Sockets;
 using System.Text.Json;
 using System.Security.AccessControl;
 using static Client.Login;
+using Client.classes;
+using System.Text.Json.Serialization;
 
 
 namespace Client
@@ -16,14 +18,15 @@ namespace Client
         private System.Windows.Forms.Timer chatUpdateTimer;
         private System.Windows.Forms.Timer FriendsListTimer;
         private System.Windows.Forms.Timer BlacklListTimer;
+        private User UserData { get; set; }
        
 
-        public MainForm()
+        public MainForm(User userData)
         {
             InitializeComponent();
-            CheckAuthToken();
             InitializeUserChatsAndMessages();
 
+            UserData = userData;
 
             chatUpdateTimer = new System.Windows.Forms.Timer();
             chatUpdateTimer.Interval = 5000; 
@@ -36,11 +39,17 @@ namespace Client
             BlacklListTimer = new System.Windows.Forms.Timer();
             BlacklListTimer.Interval = 5000;
             BlacklListTimer.Tick += BlacklListpdateTimer_Tick;
+            LabelUsername.Text = UserData.Username;
+            LabelTag.Text = UserData.Tag;
           
 
             chatUpdateTimer.Start();
             FriendsListTimer.Start();
             BlacklListTimer.Start();
+
+            UpdateBlackList();
+            UpdateFriendLists();
+            UpdateChatLists();
         }
 
        
@@ -95,43 +104,6 @@ namespace Client
 
         
         }
-        
-        
-
-        private AuthData GetAuthData()
-        {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "authData.json");
-
-            if (File.Exists(filePath))
-            {
-                string jsonData = File.ReadAllText(filePath);
-                return JsonSerializer.Deserialize<AuthData>(jsonData);
-            }
-
-            return null;
-        }
-
-
-        private void CheckAuthToken()
-        {
-            var authData = GetAuthData();
-
-            if (authData != null && !string.IsNullOrEmpty(authData.Token))
-            {
-                LabelUsername.Text = authData.Usermane;
-                LabelTag.Text = authData.Tag;
-
-                MessageBox.Show("Токен найден. Продолжаем работу с пользователем.");
-            }
-            else
-            {
-                MessageBox.Show("Требуется авторизация.");
-                Login loginForm = new Login();
-                loginForm.Show();
-                this.Close();
-            }
-        }
-
 
         private async void AddFriendList_Click(object sender, EventArgs e)
         {
@@ -142,7 +114,6 @@ namespace Client
                 return;
             }
             int targetUserId = int.Parse(AddFriensField.Text);
-            var authData = GetAuthData();
 
 
             var request = new
@@ -150,7 +121,7 @@ namespace Client
                 Type = "ADD TO FRIENDLIST",
                 Content = JsonSerializer.Serialize(new
                 {
-                    SenderId = authData.ID,
+                    SenderId = UserData.Id,
                     TargetId = targetUserId
                 })
             };
@@ -179,9 +150,9 @@ namespace Client
 
         private void StartChat_Click(object sender, EventArgs e)
         {
-            int selectedFriendId = (int)FriendListChat.SelectedValue;
+            User selectedFriend = (User)FriendListChat.SelectedValue;
 
-            OpenChatWithUser(selectedFriendId);
+            OpenChatWithUser(selectedFriend.Id);
         }
 
         private async void RemoveButton_Click(object sender, EventArgs e)
@@ -193,8 +164,7 @@ namespace Client
                 return;
             }
 
-            int targetUserId = (int)RemoveFriendList.SelectedValue;
-            var authData = GetAuthData();
+            User targetUser = (User)RemoveFriendList.SelectedValue;
           
 
             var request = new
@@ -202,8 +172,8 @@ namespace Client
                 Type = "REMOVE FROM FRIENDLIST",
                 Content = JsonSerializer.Serialize(new
                 {
-                    SenderId = authData.ID,
-                    TargetId = targetUserId
+                    SenderId = UserData.Id,
+                    TargetId = targetUser.Id,
                 })
             };
 
@@ -239,7 +209,6 @@ namespace Client
             }
 
             int targetUserId = int.Parse(AddBlacklistField.Text);
-            var authData = GetAuthData();
 
 
             var request = new
@@ -247,7 +216,7 @@ namespace Client
                 Type = "ADD TO BLACKLIST",
                 Content = JsonSerializer.Serialize(new
                 {
-                    SenderId = authData.ID,
+                    SenderId = UserData.Id,
                     TargetId = targetUserId
                 })
             };
@@ -284,7 +253,6 @@ namespace Client
             }
 
             int targetUserId = (int)RemoveBlacklist.SelectedValue;
-            var authData = GetAuthData();
 
 
             var request = new
@@ -292,7 +260,7 @@ namespace Client
                 Type = "REMOVE FROM BLACKLIST",
                 Content = JsonSerializer.Serialize(new
                 {
-                    SenderId = authData.ID,
+                    SenderId = UserData.Id,
                     TargetId = targetUserId
                 })
             };
@@ -327,13 +295,12 @@ namespace Client
                 MessageBox.Show("Ошибка при инициализации сетевого соединения.");
                 return;
             }
-            var authData = GetAuthData();
             var request = new
             {
                 Type = "GET FRIEND LIST",
                 Content = JsonSerializer.Serialize(new
                 {
-                    UserId = authData.ID
+                    UserId = UserData.Id
                 })
             };
 
@@ -349,15 +316,13 @@ namespace Client
 
             if (response.StatusCode == (int)HttpStatusCode.OK)
             {
-                var friends = JsonSerializer.Deserialize<List<Friend>>(response.Content);
+                var friends = JsonSerializer.Deserialize<List<User>>(response.Content);
 
                 FriendListChat.DataSource = friends;
                 FriendListChat.DisplayMember = "UserName"; 
-                FriendListChat.ValueMember = "UserId"; 
 
                 RemoveFriendList.DataSource = friends;
                 RemoveFriendList.DisplayMember = "UserName";
-                RemoveFriendList.ValueMember = "UserId";
             }
             else
             {
@@ -375,13 +340,12 @@ namespace Client
                 MessageBox.Show("Ошибка при инициализации сетевого соединения.");
                 return;
             }
-            var authData = GetAuthData();
             var request = new
             {
                 Type = "GET BLACKLIST",
                 Content = JsonSerializer.Serialize(new
                 {
-                    UserId = authData.ID
+                    UserId = UserData.Id
                 })
             };
 
@@ -397,11 +361,10 @@ namespace Client
 
             if (response.StatusCode == (int)HttpStatusCode.OK)
             {
-                var blacklistedUsers = JsonSerializer.Deserialize<List<BlacklistedUser>>(response.Content);
+                var blacklistedUsers = JsonSerializer.Deserialize<List<User>>(response.Content);
 
                 RemoveBlacklist.DataSource = blacklistedUsers;
                 RemoveBlacklist.DisplayMember = "Username"; 
-                RemoveBlacklist.ValueMember = "UserId"; 
             }
             else
             {
@@ -419,13 +382,12 @@ namespace Client
                 MessageBox.Show("Ошибка при инициализации сетевого соединения.");
                 return;
             }
-            var authData = GetAuthData();
             var request = new
             {
                 Type = "GET USER CHATS",
                 Content = JsonSerializer.Serialize(new
                 {
-                    UserId = authData.ID
+                    UserId = UserData.Id
                 })
             };
 
@@ -433,15 +395,21 @@ namespace Client
             byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
             await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[1024 * 48];
             int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
             string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-            var response = JsonSerializer.Deserialize<Response>(responseJson);
+            var response = JsonSerializer.Deserialize<Response>(responseJson, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
 
             if (response.StatusCode == (int)HttpStatusCode.OK)
             {
-                var chatList = JsonSerializer.Deserialize<List<Chat>>(response.Content);
+                var chatList = JsonSerializer.Deserialize<List<Chat>>(response.Content, new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve
+                });
 
                 ChatList.DataSource = chatList;
 
@@ -477,11 +445,14 @@ namespace Client
             byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
             await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[1024 * 48];
             int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
             string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-            var response = JsonSerializer.Deserialize<Response>(responseJson);
+            var response = JsonSerializer.Deserialize<Response>(responseJson, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
 
             if (response.StatusCode == (int)HttpStatusCode.OK)
             {
@@ -782,11 +753,6 @@ namespace Client
             public int Tag { get; set; }
         }
 
-        public class User
-        {
-            public int Tag { get; set; }
-        }
-
         public class Chat
         {
             public int ChatId { get; set; }
@@ -819,22 +785,12 @@ namespace Client
 
             public List<Chat> Chat { get; set; }
 
-            public List<Friends> Friends { get; set; }
+            public List<User> Friends { get; set; }
 
-            public List<Blocked> Blocked { get; set; }
+            public List<User> Blocked { get; set; }
         }
 
         public class ChatData
-        {
-            public string UserId { get; set; }
-        }
-
-        public class Friend
-        {
-            public string UserId { get; set; }
-        }
-
-        public class BlacklistedUser
         {
             public string UserId { get; set; }
         }

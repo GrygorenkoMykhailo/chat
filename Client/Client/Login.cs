@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Client.Login;
 using Client.classes;
+using System.Text.Json.Serialization;
 
 namespace Client
 {
@@ -87,31 +88,6 @@ namespace Client
             }
         }
 
-        private void SaveAuthToken(string token, int id, string tag, string username, List<Chat> chat, List<Friends> friends, List<Blocked> blocked)
-        {
-            AuthData authData = new AuthData
-            {
-                Token = token,
-                ID = id,
-                Tag = tag,
-                Username = username,
-                Chat = chat,
-                Friends = friends,
-                Blocked = blocked
-            };
-
-            string jsonData = JsonSerializer.Serialize(authData);
-
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "authData.json");
-
-            if (!File.Exists(filePath))
-            {
-                File.Create(filePath).Dispose();
-            }
-
-            File.WriteAllText(filePath, jsonData);
-        }
-
         private async void SendAuthorizationRequest(string email, string password)
         {
             NetworkStream stream = InitializeNetworkStream();
@@ -136,7 +112,7 @@ namespace Client
                 byte[] requestBytes = Encoding.UTF8.GetBytes(requestJson);
                 await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[1024 * 48];
                 int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 string responseJson = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
@@ -144,14 +120,14 @@ namespace Client
 
                 if (response.StatusCode == (int)System.Net.HttpStatusCode.OK)
                 {
-                    var authData = JsonSerializer.Deserialize<AuthData>(response.Content);
-
-                    SaveAuthToken(authData.Token, authData.ID, authData.Tag, authData.Username, authData.Chat, authData.Friends, authData.Blocked);
-
+                    var authData = JsonSerializer.Deserialize<User>(response.Content, new JsonSerializerOptions
+                    {
+                        ReferenceHandler = ReferenceHandler.Preserve
+                    });
 
                     MessageBox.Show("Авторизация успешна!");
                     this.Hide();
-                    MainForm mainForm = new MainForm();
+                    MainForm mainForm = new MainForm(authData);
                     mainForm.Show();
                 }
                 else
@@ -194,29 +170,6 @@ namespace Client
         {
             public int StatusCode { get; set; }
             public string Content { get; set; }
-        }
-        public class AuthData
-        {
-            public string Token { get; set; }
-            public int ID { get; set; }
-            public string Tag { get; set; }
-            public string Username { get; set; }
-
-            public List<Chat> Chat { get; set; }
-
-            public List<Friends> Friends { get; set; }
-
-            public List<Blocked> Blocked { get; set; }
-        }
-
-        public class Friends
-        {
-            public int ID { get; set; }
-        }
-
-        public class Blocked
-        {
-            public int id { get; set; }
         }
     }
 }
